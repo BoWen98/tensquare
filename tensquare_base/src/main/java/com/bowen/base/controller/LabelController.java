@@ -3,8 +3,10 @@ package com.bowen.base.controller;
 import com.bowen.base.entity.Label;
 import com.bowen.base.service.LabelService;
 import com.bowen.common.code.StatusCode;
+import com.bowen.common.page.PageResult;
 import com.bowen.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,8 @@ import java.util.List;
  * @Date: 2019/11/18 15:51
  * @Version: 1.0.0
  */
-@RequestMapping
-@RestController("/label")
+@RequestMapping("/label")
+@RestController
 public class LabelController {
 
     @Autowired
@@ -82,5 +84,19 @@ public class LabelController {
         label.setId(id);
         labelService.update(label);
         return new Result(true, StatusCode.OK, "修改成功");
+    }
+
+    @PostMapping("/search")
+    public Result<List> findSearch(@RequestBody Label label) {
+        return new Result<>(true, StatusCode.OK, "查询成功", labelService.findSearch(label));
+    }
+
+    @PostMapping("/search/{page}/{size}")
+    public Result<Label> findSearchAndPage(@RequestBody Label label,
+                                           @PathVariable int page,
+                                           @PathVariable int size) {
+        Page searchAndPage = labelService.findSearchAndPage(label, page, size);
+        return new Result(true, StatusCode.OK, "查询成功", new PageResult<>(searchAndPage.getTotalElements(), searchAndPage.getContent()));
+
     }
 }

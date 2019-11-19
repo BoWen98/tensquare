@@ -1,6 +1,5 @@
 package com.bowen.common.page;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
@@ -15,8 +14,12 @@ import java.util.List;
  * @Version: 1.0.0
  */
 @Data
-@AllArgsConstructor
 public class PageResult<T> {
     private Long total;
     private List<T> rows;
+
+    public PageResult(Long total, List<T> rows) {
+        this.total = total;
+        this.rows = rows;
+    }
 }
